@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New Tab</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
+      * {
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        overflow: hidden;
+      }
+      #video-background {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        object-fit: cover;
+      }
+      .calendar-container {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 20px;
+        padding: 20px 25px; 
+        width: 300px; 
+        box-shadow: 0 0 20px rgb(88, 71, 185);
+      }
+      .month-year {
+        text-align: center;
+        font-size: 15px; 
+        font-weight: 700;
+        margin-bottom: 8px; 
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        user-select: none;
+      }
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px; 
+      }
+      .day-name,
+      .date {
+        text-align: center;
+        font-weight: bold;
+        font-size: 10px; 
+        user-select: none;
+      }
+      .day-name {
+        text-transform: uppercase;
+      }
+      .date {
+        font-weight: 600;
+        font-size: 16px; /* dikurangi */
+      }
+      .empty {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <video autoplay muted loop id="video-background">
+      <source src="https://files.catbox.moe/8pwp0z.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="calendar-container">
+      <div class="month-year" id="monthYear"></div>
+      <div class="calendar" id="calendar">
+
+        <div class="day-name">Sun</div>
+        <div class="day-name">Mon</div>
+        <div class="day-name">Tue</div>
+        <div class="day-name">Wed</div>
+        <div class="day-name">Thu</div>
+        <div class="day-name">Fri</div>
+        <div class="day-name">Sat</div>
+
+        
+      </div>
+    </div>
+
+    <script>
+      function generateCalendar(month, year) {
+        const monthYear = document.getElementById("monthYear");
+        const calendar = document.getElementById("calendar");
+
+        
+        while (calendar.children.length > 7) {
+          calendar.removeChild(calendar.lastChild);
+        }
+
+        const monthNames = [
+          "JANUARY",
+          "FEBRUARY",
+          "MARCH",
+          "APRIL",
+          "MAY",
+          "JUNE",
+          "JULY",
+          "AUGUST",
+          "SEPTEMBER",
+          "OCTOBER",
+          "NOVEMBER",
+          "DECEMBER",
+        ];
+
+
+        monthYear.innerHTML = `${monthNames[month]} / <strong>${year}</strong>`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        
+        for (let i = 0; i < firstDay; i++) {
+          let emptyDiv = document.createElement("div");
+          emptyDiv.classList.add("date", "empty");
+          emptyDiv.textContent = "0";
+          calendar.appendChild(emptyDiv);
+        }
+
+        
+        for (let date = 1; date <= daysInMonth; date++) {
+          let dateDiv = document.createElement("div");
+          dateDiv.classList.add("date");
+          dateDiv.textContent = date;
+          calendar.appendChild(dateDiv);
+        }
+      }
+
+      
+      const now = new Date();
+      const currentMonth = now.getMonth(); 
+      const currentYear = now.getFullYear();
+
+      generateCalendar(currentMonth, currentYear);
+      
+const video = document.getElementById('video-background');
+video.addEventListener('loadeddata', function() {
+  document.querySelector('.calendar-container').style.display = 'block';
+});
+    </script>
+  </body>
+</html>
